@@ -7,7 +7,7 @@ manifest that registers it.
 
 ## Contract
 
-The processor reads the single `*.nwb` file in `INPUT_DIR` and publishes the bundle to
+The processor reads the single `*.nwb` file in `INPUT_DIR` and writes the bundle to
 `OUTPUT_DIR/<stem>.zarr`, so `session.nwb` produces `session.zarr`. It then writes
 `asset-properties.json` beside the bundle, or the file `ASSET_PROPERTIES_FILE` names,
 holding the bundle directory name under the key `root_path`. The parameters in
@@ -18,7 +18,7 @@ The exit code is 0 on success and 2 when `INPUT_DIR` or `OUTPUT_DIR` is unset or
 It is also 2 when `INPUT_DIR` cannot be read or does not hold exactly one `.nwb` file.
 The converter returns 2 for a `ZARR_WRITER_*` value it rejects and 1 for a failed
 conversion, and the processor exits with that code. The processor exits with 1 when it
-cannot write the properties file, and it writes none unless the bundle was published.
+cannot write the properties file, and it writes none unless the converter succeeds.
 
 ## Running locally
 

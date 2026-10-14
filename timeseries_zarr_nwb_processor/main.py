@@ -16,11 +16,11 @@ def main(env: Mapping[str, str]) -> int:
     """Run one conversion under the Pennsieve contract and return an exit code.
 
     Resolves the input file and the output paths from env, runs the converter
-    on them, and writes the output properties beside the published bundle.
+    on them, and writes the output properties beside the bundle.
     The converter reads its own ZARR_WRITER_ settings from the process
     environment. Returns 0 on success, 2 on a bad environment, the converter's
     code when it fails, and 1 when the properties file cannot be written. No
-    properties file is written unless the bundle was published.
+    properties file is written unless the converter succeeds.
     """
     try:
         cfg = load_config(env)
@@ -28,12 +28,12 @@ def main(env: Mapping[str, str]) -> int:
         logger.exception("invalid invocation")
         return 2
 
-    code = convert([str(cfg.nwb_path), str(cfg.final_dir)])
+    code = convert([str(cfg.nwb_path), str(cfg.bundle_dir)])
     if code != 0:
         return code
 
     try:
-        write_properties(cfg.properties_path, cfg.final_dir)
+        write_properties(cfg.properties_path, cfg.bundle_dir)
     except OSError:
         logger.exception("failed to write %s", cfg.properties_path)
         return 1

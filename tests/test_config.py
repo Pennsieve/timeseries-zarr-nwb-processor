@@ -40,7 +40,7 @@ def test_input_dir_scan_finds_sole_nwb(tmp_path):
     cfg = load_config({"INPUT_DIR": str(input_dir), "OUTPUT_DIR": str(out)})
     assert isinstance(cfg, Config)
     assert cfg.nwb_path == input_dir / "session.nwb"
-    assert cfg.final_dir == out / "session.zarr"
+    assert cfg.bundle_dir == out / "session.zarr"
 
 
 def test_input_dir_with_no_nwb_raises(tmp_path):
@@ -94,5 +94,5 @@ def test_properties_file_is_a_sibling_of_the_bundle(tmp_path):
     cfg = load_config(
         {"INPUT_DIR": str(input_dir), "OUTPUT_DIR": str(tmp_path / "out")}
     )
-    assert cfg.properties_path.parent == cfg.final_dir.parent
+    assert cfg.properties_path.parent == cfg.bundle_dir.parent
     assert isinstance(cfg.properties_path, Path)

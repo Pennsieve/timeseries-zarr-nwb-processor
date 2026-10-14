@@ -47,8 +47,7 @@ outputs:
     description: >-
       One TS-Zarr 1.0 bundle written into OUTPUT_DIR, named for the input file
       stem: session.nwb produces session.zarr. Its recording.json holds the
-      subject, session, and wall-clock start. The directory appears in one
-      atomic rename, so a reader never sees a partial bundle.
+      subject, session, and wall-clock start.
 
   - name: properties
     dataType: file

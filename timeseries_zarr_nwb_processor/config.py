@@ -10,20 +10,20 @@ from timeseries_zarr_nwb_processor.properties import DEFAULT_PROPERTIES_FILE
 
 @dataclass(frozen=True, slots=True)
 class Config:
-    """The input file, the bundle path, and the properties path of one run.
+    """The input file, the bundle directory, and the properties path of one run.
 
-    properties_path is a sibling of final_dir.
+    properties_path is a sibling of bundle_dir.
     """
 
     nwb_path: Path
-    final_dir: Path
+    bundle_dir: Path
     properties_path: Path
 
 
 def load_config(env: Mapping[str, str]) -> Config:
     """Resolve a Config from the environment.
 
-    The bundle is published to OUTPUT_DIR/<stem>.zarr, named for the *.nwb
+    The bundle is written to OUTPUT_DIR/<stem>.zarr, named for the *.nwb
     file in INPUT_DIR. ASSET_PROPERTIES_FILE names the properties file
     written beside the bundle, DEFAULT_PROPERTIES_FILE when unset. Raises
     ValueError if INPUT_DIR or OUTPUT_DIR is unset or empty, or if INPUT_DIR
@@ -35,16 +35,13 @@ def load_config(env: Mapping[str, str]) -> Config:
         raise ValueError(
             "INPUT_DIR and OUTPUT_DIR must both be set and non-empty"
         )
-    # Atomic publish renames the final path, and a rename cannot target a mount
-    # point such as the bare OUTPUT_DIR volume. The bundle is therefore a named
-    # directory inside it, taking the input stem: session.nwb -> session.zarr.
     nwb_path = _sole_nwb(Path(input_dir))
-    final_dir = Path(output_dir) / f"{nwb_path.stem}.zarr"
+    bundle_dir = Path(output_dir) / f"{nwb_path.stem}.zarr"
     properties_name = env.get("ASSET_PROPERTIES_FILE", DEFAULT_PROPERTIES_FILE)
     return Config(
         nwb_path=nwb_path,
-        final_dir=final_dir,
-        properties_path=final_dir.parent / properties_name,
+        bundle_dir=bundle_dir,
+        properties_path=bundle_dir.parent / properties_name,
     )
 
 

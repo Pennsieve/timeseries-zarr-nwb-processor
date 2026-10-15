@@ -32,8 +32,9 @@ make run        # docker-compose build + up, against data/input and data/output
 
 ## Build
 
-The Dockerfile installs the library and the converter from the GitHub refs that
-`requirements.txt` names, then installs this package.
+The Dockerfile installs the converter from the GitHub ref that `requirements.txt`
+names, then installs this package. The converter pulls the `timeseries-zarr` library
+from PyPI.
 
 ```bash
 docker build -t timeseries-zarr-nwb-processor .
@@ -42,11 +43,11 @@ docker build -t timeseries-zarr-nwb-processor .
 ## Development
 
 Python 3.12, fully typed under `mypy --strict`, with a strict `ruff` ruleset. `make venv`
-installs `../timeseries-zarr-py` and `../timeseries-zarr-nwb` in editable mode; set
-`LIBRARY=` and `CONVERTER=` to point elsewhere.
+installs the converter from the same GitHub ref as the Dockerfile, with the library
+from PyPI.
 
 ```bash
-make venv        # create the virtualenv and install the siblings and this package
+make venv        # create the virtualenv and install the converter, the library, and this package
 make test        # pytest
 make typecheck   # mypy --strict
 make lint        # ruff check --fix + ruff format (rewrites files)

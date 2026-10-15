@@ -1,2 +1,1 @@
-timeseries-zarr-py @ git+https://github.com/Pennsieve/timeseries-zarr-py.git@main
 timeseries-zarr-nwb @ git+https://github.com/Pennsieve/timeseries-zarr-nwb.git@main

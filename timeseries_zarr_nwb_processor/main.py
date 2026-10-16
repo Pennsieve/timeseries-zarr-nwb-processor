@@ -44,7 +44,3 @@ def run() -> None:
     """Configure INFO logging, run main on os.environ, and exit with its code."""
     logging.basicConfig(level=logging.INFO)
     raise SystemExit(main(os.environ))
-
-
-if __name__ == "__main__":
-    run()

@@ -32,9 +32,10 @@ make run        # docker-compose build + up, against data/input and data/output
 
 ## Build
 
-The Dockerfile installs the converter from the GitHub ref that `requirements.txt`
-names, then installs this package. The converter pulls the `timeseries-zarr` library
-from PyPI.
+`requirements.in` pins the converter to a commit on GitHub and the `timeseries-zarr`
+library to a release on PyPI. `requirements.txt` is the lock file generated from it and
+pins every runtime dependency. The Dockerfile pins the base image by digest, installs
+`requirements.txt`, then copies this package's source into the image.
 
 ```bash
 docker build -t timeseries-zarr-nwb-processor .
@@ -43,11 +44,21 @@ docker build -t timeseries-zarr-nwb-processor .
 ## Development
 
 Python 3.12, fully typed under `mypy --strict`, with a strict `ruff` ruleset. `make venv`
-installs the converter from the same GitHub ref as the Dockerfile, with the library
-from PyPI.
+installs the same locked dependencies as the Dockerfile, plus the development tools
+locked in `requirements-dev.txt`. The package itself is not installed. The tests and
+the `make` targets import it from the source tree.
+
+To change a dependency, edit `requirements.in` or `requirements-dev.in`, run
+`make lock`, then `make install`. Commit the edited `.in` file and both lock files.
+
+The pre-commit hooks run the ruff in `venv/`, the same version `make check` runs. Run
+`make venv` before `make pre-commit`.
 
 ```bash
-make venv        # create the virtualenv and install the converter, the library, and this package
+make venv        # create the virtualenv from the lock files
+make install     # sync an existing virtualenv to the lock files
+make lock        # regenerate both lock files from the .in files
+make pre-commit  # install the git hooks
 make test        # pytest
 make typecheck   # mypy --strict
 make lint        # ruff check --fix + ruff format (rewrites files)

@@ -1,7 +1,15 @@
+# The hooks run the ruff that requirements-dev.txt locks into the venv, the same
+# binary make check runs. Run make venv before make pre-commit.
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.3
+  - repo: local
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        name: ruff check
+        entry: venv/bin/ruff check --fix --exit-non-zero-on-fix
+        language: system
+        types_or: [python, pyi]
       - id: ruff-format
+        name: ruff format
+        entry: venv/bin/ruff format
+        language: system
+        types_or: [python, pyi]

@@ -1,30 +1,10 @@
-[build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "timeseries-zarr-nwb-processor"
-version = "0.1.0"
-description = "Pennsieve analytics processor that converts an NWB recording into a TS-Zarr bundle"
-requires-python = ">=3.12"
-dependencies = [
-    "timeseries-zarr-nwb>=0.1",
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore:Consolidated metadata is currently not part:UserWarning",
 ]
-
-[project.optional-dependencies]
-test = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "pytest-mock>=3.10.0",
-]
-dev = [
-    "mypy>=1.8.0",
-    "ruff",
-    "pre-commit",
-]
-
-[tool.setuptools.packages.find]
-include = ["timeseries_zarr_nwb_processor*"]
 
 [tool.coverage.run]
 source = ["timeseries_zarr_nwb_processor"]
@@ -39,7 +19,6 @@ exclude_lines = [
     "def __repr__",
     "raise AssertionError",
     "raise NotImplementedError",
-    "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
     "^\\s*\\.\\.\\.\\s*$",
 ]

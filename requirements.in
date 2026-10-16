@@ -1,0 +1,2 @@
+timeseries-zarr-nwb @ git+https://github.com/Pennsieve/timeseries-zarr-nwb.git@19ee2d9f6ab0b6ccc87e155fc9df0b98652d1cc9
+timeseries-zarr==0.1.0a2

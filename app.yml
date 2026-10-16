@@ -78,10 +78,10 @@ parameters:
     description: >-
       Upper bound on the number of levels built above the raw samples. Each
       level is 4x coarser than the one below it, and the raw samples are not a
-      level. Integer values only.
+      level. 0 writes the raw samples only. Integer values only.
     type: number
     default: 15
-    min: 1
+    min: 0
     max: 15
 
   - name: ZARR_WRITER_VAR

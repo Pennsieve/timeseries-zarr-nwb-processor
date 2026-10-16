@@ -1,7 +1,8 @@
-.PHONY: help run clean venv install test test-cov lint typecheck check pre-commit
+.PHONY: help run clean venv install lock test test-cov lint typecheck check pre-commit
 
 VENV_DIR      ?= venv
-PYTHON        ?= python3
+PYTHON        ?= python3.12
+COMPILE       = $(VENV_DIR)/bin/pip-compile --quiet --strip-extras --allow-unsafe --no-emit-index-url
 
 .DEFAULT: help
 
@@ -9,7 +10,8 @@ help:
 	@echo "Make Help for timeseries-zarr-nwb-processor"
 	@echo ""
 	@echo "make venv       - create virtual environment and install all dependencies"
-	@echo "make install    - install dependencies into existing venv"
+	@echo "make install    - sync an existing venv to the lock files"
+	@echo "make lock       - regenerate requirements.txt and requirements-dev.txt from the .in files"
 	@echo "make pre-commit - install pre-commit hooks"
 	@echo "make test       - run tests"
 	@echo "make test-cov   - run tests with coverage report"
@@ -21,15 +23,17 @@ help:
 
 venv:
 	$(PYTHON) -m venv $(VENV_DIR)
-	$(VENV_DIR)/bin/pip install --upgrade pip
-	$(VENV_DIR)/bin/pip install -r requirements.txt -e ".[test,dev]"
+	$(VENV_DIR)/bin/pip install -r requirements.txt -r requirements-dev.txt
 	@echo ""
 	@echo "Virtual environment created. Activate with:"
 	@echo "  source $(VENV_DIR)/bin/activate"
 
 install:
-	$(VENV_DIR)/bin/pip install --upgrade pip
-	$(VENV_DIR)/bin/pip install -r requirements.txt -e ".[test,dev]"
+	$(VENV_DIR)/bin/pip-sync requirements.txt requirements-dev.txt
+
+lock:
+	$(COMPILE) --output-file requirements.txt requirements.in
+	$(COMPILE) --output-file requirements-dev.txt requirements-dev.in
 
 test:
 	$(VENV_DIR)/bin/python -m pytest tests/ -v

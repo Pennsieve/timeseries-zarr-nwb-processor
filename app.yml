@@ -77,12 +77,33 @@ parameters:
     label: Maximum pyramid levels
     description: >-
       Upper bound on the number of levels built above the raw samples. Each
-      level is 4x coarser than the one below it, and the raw samples are not a
-      level. 0 writes the raw samples only. Integer values only.
+      level is coarser than the one below it by the decimation factor, 4 by
+      default, and the raw samples are not a level. 0 writes the raw samples
+      only. Integer values only.
     type: number
     default: 15
     min: 0
     max: 15
+
+  - name: ZARR_WRITER_CONTINUOUS_DECIMATION_FACTOR
+    label: Continuous decimation factor
+    description: >-
+      Decimation of continuous channels. One integer of 2 or more sets the
+      ratio between the bin widths of consecutive levels. Comma separated
+      integers such as 8,4 set a ladder: the first number is the samples per
+      bin of level 1, each later number is the ratio of that level to the one
+      below, and the last number repeats for further levels.
+    type: string
+    default: "4"
+
+  - name: ZARR_WRITER_EVENT_DECIMATION_FACTOR
+    label: Event decimation factor
+    description: >-
+      Ratio between the periods of consecutive count levels of event channels.
+      Integer values of 2 or more only.
+    type: number
+    default: 4
+    min: 2
 
   - name: ZARR_WRITER_VAR
     label: Write variance
